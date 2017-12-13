@@ -21,12 +21,68 @@ Enemy.prototype.render = function() {
 
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
+var Player = function() {
+    this.sprite = 'images/char-boy.png';
+    this.reset();
+};
+
+// 此为游戏必须的函数，用来更新玩家的位置
+Player.prototype.update = function() {
+    this.x = this.col * 101;
+    this.y = this.row * 83 - 30;
+};
+
+// 此为游戏必须的函数，用来在屏幕上画出玩家
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// 接受指令支字符串用来移动玩家
+Player.prototype.handleInput = function(direction) {
+    switch(direction) {
+        case 'left': 
+            this.col -= 1;
+            break;
+        case 'up':
+            this.row -= 1;
+            break;
+        case 'right': 
+            this.col += 1;
+            break;
+        case 'down':
+            this.row += 1;
+            break;
+    }
+
+    if (this.col<0) {
+        this.col = 0;
+    }
+
+    if (this.col>4) {
+        this.col = 4;
+    }
+
+    if (this.row<1) {
+        this.row = 1;
+    }
+
+    if (this.row>5) {
+        this.row = 5;
+    }
+};
+
+// 重置玩家初始参数
+Player.prototype.reset = function() {
+    // 设置玩家初始位置
+    this.col = 2;
+    this.row = 5;
+};
 
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
-
+var player = new Player();
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
