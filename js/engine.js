@@ -42,6 +42,11 @@ var Engine = (function(global) {
         update(dt);
         render();
 
+        // 如果失去全部生命，游戏结束
+        if (lifePanel.volume<1) {
+            gameOver();
+        }
+
         /* 设置我们的 lastTime 变量，它会被用来决定 main 函数下次被调用的事件。 */
         lastTime = now;
 
@@ -97,6 +102,7 @@ var Engine = (function(global) {
     function checkCollisions(player) {
         allEnemies.forEach(function(enemy) {
             if (enemy.checkCollisions(player)) {
+                lifePanel.dec();
                 return reset();
             }
         });
@@ -179,6 +185,9 @@ var Engine = (function(global) {
     function renderGadgets() {
         // 分数渲染
         scorePanel.render();
+
+        // 生命渲染
+        lifePanel.render();
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
@@ -188,6 +197,22 @@ var Engine = (function(global) {
     function reset() {
         // 重置玩家
         player.reset();
+    }
+
+    /* 游戏重新开始
+     */
+    function restart() {
+        player.reset();
+        allEnemies.forEach(function(enemy) {
+            enemy.reset();
+        });
+        scorePanel.reset();
+        lifePanel.reset();
+    }
+
+    function gameOver() {
+        alert("游戏结束！总得分：" + scorePanel.score);
+        restart();
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
