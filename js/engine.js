@@ -58,12 +58,33 @@ var Engine = (function(global) {
         main();
     }
 
-    /* 这个函数被 main 函数（我们的游戏主循环）调用，它本身调用所有的需要更新游戏角色
+    /* 这个函数被 main 函数（我们的游戏主循环）调用
+     */
+    function update(dt) {
+        if (stage=='menu') {
+            updateMenu();
+        } else {
+            updateGame(dt);
+        }
+    }
+
+    /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
+     * 函数，然后，它会调用玩家对象的 update 方法，最后这个函数被 update 函数调用。
+     * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
+     */
+    function updateMenu() {
+        // 如果角色选择完成，游戏状态变为游戏中
+        if (charSelector.update()) {
+            stage = 'gaming';
+        }
+    }
+
+    /* 这个函数被 render 函数调用，它本身调用所有的需要更新游戏角色
      * 数据的函数，取决于你怎样实现碰撞检测（意思是如何检测两个角色占据了同一个位置，
      * 比如你的角色死的时候），你可能需要在这里调用一个额外的函数。现在我们已经把这里
      * 注释了，你可以在这里实现，也可以在 app.js 对应的角色类里面实现。
      */
-    function update(dt) {
+    function updateGame(dt) {
         updateEntities(dt);
         checkCollisions(player);
     }
@@ -90,12 +111,27 @@ var Engine = (function(global) {
         player.update();
     }
 
+    function render() {
+        // 在渲染之前清空当前 canvas
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+
+        if (stage=='menu') {
+            renderMenu();
+        } else {
+            renderGame();
+        }
+    }
+
+    function renderMenu() {
+        charSelector.render();
+    }
+
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
      * 在每个游戏的时间间隙都会被调用一次（或者说游戏引擎的每个循环），因为这就是游戏
      * 怎么工作的，他们就像是那种每一页上都画着不同画儿的书，快速翻动的时候就会出现是
      * 动画的幻觉，但是实际上，他们只是不停的在重绘整个屏幕。
      */
-    function render() {
+    function renderGame() {
         /* 这个数组保存着游戏关卡的特有的行对应的图片相对路径。 */
         var rowImages = [
                 'images/water-block.png',   // 这一行是河。
@@ -108,9 +144,6 @@ var Engine = (function(global) {
             numRows = 6,
             numCols = 5,
             row, col;
-        
-        // 在渲染之前清空当前 canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
 
         /* 便利我们上面定义的行和列，用 rowImages 数组，在各自的各个位置绘制正确的图片 */
         for (row = 0; row < numRows; row++) {
@@ -155,7 +188,12 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        "images/char-cat-girl.png",
+        "images/char-horn-girl.png",
+        "images/char-pink-girl.png",
+        "images/char-princess-girl.png",
+        "images/Selector.png"
     ]);
     Resources.onReady(init);
 
