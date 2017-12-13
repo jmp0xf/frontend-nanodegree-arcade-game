@@ -41,6 +41,11 @@ Enemy.prototype.reset = function() {
     this.x = -101;
 };
 
+// 检测碰撞
+Enemy.prototype.checkCollisions = function(player) {
+    return this.row==player.row&&this.x>player.x-60&&this.x<player.x+55;
+};
+
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
 var Player = function() {

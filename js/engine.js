@@ -65,7 +65,18 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions(player);
+    }
+
+    /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 checkCollisions()
+     * 函数来检测碰撞是否发生，如果碰撞，则重置游戏。
+     */
+    function checkCollisions(player) {
+        allEnemies.forEach(function(enemy) {
+            if (enemy.checkCollisions(player)) {
+                return reset();
+            }
+        });
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -132,7 +143,8 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
-        // 空操作
+        // 重置玩家
+        player.reset();
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
