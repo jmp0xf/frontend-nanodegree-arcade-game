@@ -1,3 +1,5 @@
+"use strict";
+
 // 游戏的状态，可以为 'menu' 或者 'gaming'
 var stage = 'menu';
 
