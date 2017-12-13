@@ -204,6 +204,34 @@ ScorePanel.prototype.render = function() {
     ctx.fillText("分数：" + this.score, 5, 40);
 };
 
+// 生命面板
+var  LifePanel = function() {
+    this.sprite = "images/Heart.png";
+    this.offset = 460;
+    this.reset();
+};
+
+LifePanel.prototype.reset = function() {
+    // 初始生命数
+    this.volume = 3;
+};
+
+// 减条命
+LifePanel.prototype.dec = function() {
+    this.volume -= 1;
+    if (this.volume<0) {
+        this.volume = 0;
+    }
+};
+
+// 显示生命数
+LifePanel.prototype.render = function() {
+    // 渲染所有角色形象
+    for(var i=0;i<this.volume;i++) {
+        ctx.drawImage(Resources.get(this.sprite), this.offset - i * 35, 0, 34, 57);
+    }
+};
+
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
@@ -216,6 +244,9 @@ var charSelector = new CharSelector();
 
 // 实例化分数面板
 var scorePanel= new ScorePanel();
+
+// 实例化生命面板
+var  lifePanel= new LifePanel();
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
