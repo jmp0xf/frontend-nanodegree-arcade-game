@@ -5,6 +5,9 @@ var Enemy = function() {
 
     // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
+
+    // 重置行进参数
+    this.reset();
 };
 
 // 此为游戏必须的函数，用来更新敌人的位置
@@ -12,11 +15,30 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
+    this.x = this.x + dt * this.speed;
+    this.y = this.row * 83 - 23;
+
+    // 如果敌人移出了 canvas 范围，则重新设定参数进入 canvas
+    if (this.x>502) {
+        this.reset();
+    }
 };
 
 // 此为游戏必须的函数，用来在屏幕上画出敌人，
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// 重置敌人行进参数
+Enemy.prototype.reset = function() {
+    // 随机选择一行作为行进道路
+    this.row = 1 + Math.floor(Math.random() * 3);
+
+    // 随机选择速度
+    this.speed = 100 * (2 + Math.floor(Math.random() * 3));
+
+    // 初始化横坐标
+    this.x = -101;
 };
 
 // 现在实现你自己的玩家类
@@ -81,6 +103,8 @@ Player.prototype.reset = function() {
 
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
+var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
+
 // 把玩家对象放进一个叫 player 的变量里面
 var player = new Player();
 
