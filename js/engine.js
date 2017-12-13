@@ -159,6 +159,7 @@ var Engine = (function(global) {
         }
 
         renderEntities();
+        renderGadgets();
     }
 
     /* 这个函数会在每个时间间隙被 render 函数调用。他的目的是分别调用你在 enemy 和 player
@@ -171,6 +172,13 @@ var Engine = (function(global) {
         });
 
         player.render();
+    }
+
+    /* 小部件渲染
+     */
+    function renderGadgets() {
+        // 分数渲染
+        scorePanel.render();
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个

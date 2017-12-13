@@ -95,7 +95,8 @@ Player.prototype.handleInput = function(direction) {
     }
 
     if (this.row<1) {
-        this.row = 1;
+        scorePanel.inc();
+        this.row = 5;
     }
 
     if (this.row>5) {
@@ -185,6 +186,24 @@ CharSelector.prototype.handleInput = function(key) {
     }
 };
 
+// 分数面板
+var  ScorePanel = function() {
+    this.reset();
+};
+
+ScorePanel.prototype.reset = function() {
+    this.score = 0;
+};
+
+ScorePanel.prototype.inc = function() {
+    this.score += 10;
+};
+
+ScorePanel.prototype.render = function() {
+    ctx.font = "20px normal";
+    ctx.fillText("分数：" + this.score, 5, 40);
+};
+
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
@@ -194,6 +213,9 @@ var player = new Player();
 
 // 实例化角色形象选择器
 var charSelector = new CharSelector();
+
+// 实例化分数面板
+var scorePanel= new ScorePanel();
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
